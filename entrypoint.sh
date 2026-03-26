@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Validate required env vars
+if [ -z "$CURSOR_REPO_URL" ]; then
+  echo "ERROR: CURSOR_REPO_URL is required. Set it to your target repo (e.g. https://github.com/org/repo)"
+  exit 1
+fi
+
 WORK_DIR="/workspace"
 mkdir -p "$WORK_DIR"
 cd "$WORK_DIR"
@@ -18,11 +24,7 @@ if [ ! -d ".git" ]; then
   git config user.email "worker@cursor.com"
   git config user.name "Cursor Worker"
   git commit --allow-empty -m "init"
-  if [ -n "$CURSOR_REPO_URL" ]; then
-    git remote add origin "$CURSOR_REPO_URL"
-  else
-    echo "WARNING: CURSOR_REPO_URL not set. Worker will start but may not accept sessions."
-  fi
+  git remote add origin "$CURSOR_REPO_URL"
 fi
 
 # Build agent command
