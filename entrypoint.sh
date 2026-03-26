@@ -1,20 +1,13 @@
 #!/bin/bash
 set -e
 
-# Validate required env vars
-if [ -z "$CURSOR_REPO_URL" ]; then
-  echo "ERROR: CURSOR_REPO_URL is required. Set it to your target repo (e.g. https://github.com/org/repo)"
-  exit 1
-fi
-
 WORK_DIR="/workspace"
 mkdir -p "$WORK_DIR"
 cd "$WORK_DIR"
 
 # Set up git credentials if GIT_TOKEN is provided
-if [ -n "$GIT_TOKEN" ]; then
+if [ -n "$GIT_TOKEN" ] && [ -n "$CURSOR_REPO_URL" ]; then
   git config --global credential.helper store
-  # Extract host from repo URL and store credential
   REPO_HOST=$(echo "$CURSOR_REPO_URL" | sed -n 's|https://\([^/]*\).*|\1|p')
   echo "https://x-access-token:${GIT_TOKEN}@${REPO_HOST}" > ~/.git-credentials
 fi
@@ -25,7 +18,11 @@ if [ ! -d ".git" ]; then
   git config user.email "worker@cursor.com"
   git config user.name "Cursor Worker"
   git commit --allow-empty -m "init"
-  git remote add origin "$CURSOR_REPO_URL"
+  if [ -n "$CURSOR_REPO_URL" ]; then
+    git remote add origin "$CURSOR_REPO_URL"
+  else
+    echo "WARNING: CURSOR_REPO_URL not set. Worker will start but may not accept sessions."
+  fi
 fi
 
 # Build agent command
