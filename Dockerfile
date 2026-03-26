@@ -8,6 +8,9 @@ RUN apt-get update && \
 RUN curl https://cursor.com/install -fsS | bash
 ENV PATH="/root/.local/bin:$PATH"
 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 10000
 
-CMD ["agent", "worker", "start", "--management-addr", ":10000"]
+ENTRYPOINT ["/entrypoint.sh"]
