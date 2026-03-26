@@ -8,6 +8,6 @@ RUN apt-get update && \
 RUN curl https://cursor.com/install -fsS | bash
 ENV PATH="/root/.cursor/bin:$PATH"
 
-EXPOSE 8080
+EXPOSE 10000
 
-CMD ["agent", "worker", "start", "--management-addr", ":8080"]
+CMD ["agent", "worker", "start", "--management-addr", ":10000"]
