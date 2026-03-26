@@ -6,7 +6,7 @@ RUN apt-get update && \
 
 # Install Cursor CLI
 RUN curl https://cursor.com/install -fsS | bash
-ENV PATH="/root/.cursor/bin:$PATH"
+ENV PATH="/root/.local/bin:$PATH"
 
 EXPOSE 10000
 
