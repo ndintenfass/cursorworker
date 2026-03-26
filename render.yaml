@@ -8,3 +8,7 @@ services:
     envVars:
       - key: CURSOR_API_KEY
         sync: false
+      - key: CURSOR_REPO_URL
+        sync: false
+      - key: GIT_TOKEN
+        sync: false
